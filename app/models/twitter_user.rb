@@ -1,6 +1,11 @@
 class TwitterUser < ActiveRecord::Base
   # Remember to create a migration!
   has_many :tweets
+
+  def self.tweet(tweet_text)
+    $client.update(tweet_text)
+  end
+
   def fetch_tweets!
     # byebug
     @user_timeline = $client.user_timeline(self.username).first(10)
