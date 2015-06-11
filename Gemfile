@@ -17,6 +17,7 @@ gem 'rake'
 gem 'twitter'
 gem 'shotgun'
 gem 'byebug'
+gem 'omniauth-twitter'
 
 group :test do
   gem 'faker'

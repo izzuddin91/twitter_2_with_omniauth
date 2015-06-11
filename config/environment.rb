@@ -16,6 +16,9 @@ require 'active_record'
 require 'logger'
 
 require 'sinatra'
+
+require 'omniauth-twitter'
+
 require "sinatra/reloader" if development?
 require 'byebug'
 require 'erb'
@@ -31,20 +34,12 @@ Dir[APP_ROOT.join('app', 'controllers', '*.rb')].each { |file| require file }
 Dir[APP_ROOT.join('app', 'helpers', '*.rb')].each { |file| require file }
 
 # Set up the database and models
+
+
 require APP_ROOT.join('config', 'database')
 
 API_KEYS = YAML::load(File.open('config/twitterapi.yaml'))
 
-$client = Twitter::REST::Client.new do |config|
-  config.consumer_key        = API_KEYS["consumer_key"]
-  config.consumer_secret     = API_KEYS["consumer_secret"]
-  config.access_token        = API_KEYS["access_token"]
-  config.access_token_secret = API_KEYS["access_token_secret"]
+use OmniAuth::Builder do
+  provider :twitter, API_KEYS["consumer_key"], API_KEYS["consumer_secret"]
 end
-
-# $client = Twitter::REST::Client.new do |config|
-#   config.consumer_key        = "wd5o0dqMTOQEnMjOExv72IQRn"
-#   config.consumer_secret     = "vk0A7j6RAKMEdCr2RbAzKpnPvXZ5rkGrDBjeRZ6MMGFAAggQrs"
-#   config.access_token        = "55180473-drzVnZvedR8pz3YCIbHhY4vZhKs6QbaK3OiOo3RE2"
-#   config.access_token_secret = "ymZ4zjVH1o4pDNAHXlwqjSblwq8ZlqOWr9Zp9pmcOwyFL"
-# end

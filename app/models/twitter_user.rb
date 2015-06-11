@@ -2,10 +2,6 @@ class TwitterUser < ActiveRecord::Base
   # Remember to create a migration!
   has_many :tweets
 
-  def self.tweet(tweet_text)
-    $client.update(tweet_text)
-  end
-
   def fetch_tweets!
     # byebug
     @user_timeline = $client.user_timeline(self.username).first(10)
@@ -26,4 +22,18 @@ class TwitterUser < ActiveRecord::Base
       return false
     end
   end
+
+  def generate_client
+    @client = Twitter::REST::Client.new do |config|
+      config.consumer_key        = API_KEYS["consumer_key"]
+      config.consumer_secret     = API_KEYS["consumer_secret"]
+      config.access_token        = access_token
+      config.access_token_secret = access_token_secret
+    end
+  end
 end
+
+
+
+
+
